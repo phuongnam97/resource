@@ -47,4 +47,16 @@ public class CustomerController {
         }
         return new ResponseEntity<>(customer, HttpStatus.OK);
     }
+
+    @DeleteMapping("/customer/{id}")
+    public ResponseEntity<Customer> updateCustomer(@PathVariable("id") Long id){
+        Customer existing = customerService.getById(id);
+        if (existing == null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        if (customerService.deleteById(id)){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(existing, HttpStatus.OK);
+    }
 }

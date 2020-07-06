@@ -18,13 +18,16 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Customer getById(Long id) {
-        return customerDAO.findById(id).get();
+        if (customerDAO.findById(id).isPresent()) {
+            return customerDAO.findById(id).get();
+        }
+        return null;
     }
 
     @Override
     public boolean create(Customer customer) {
         // Check exist telephone
-        if (customerDAO.findByTelephone(customer.getTelephone()) == null){
+        if (customerDAO.findByTelephone(customer.getTelephone()) == null) {
             customerDAO.save(customer);
             return true;
         }
@@ -34,18 +37,22 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public boolean update(Customer customer) {
         // check exist customer
-        Customer existing = customerDAO.findById(customer.getId()).get();
-        if ( existing != null ){
-            customerDAO.save(customer);
-            return true;
+        if (customerDAO.findById(customer.getId()).isPresent()) {
+            Customer existing = customerDAO.findById(customer.getId()).get();
+            if (customerDAO.findByTelephone(customer.getTelephone()) == null ||
+                customerDAO.findByTelephone(customer.getTelephone()).getId().equals(existing.getId())) {
+                customerDAO.save(customer);
+                return true;
+            }
         }
         return false;
     }
 
     @Override
     public boolean deleteById(Long id) {
-        // check exist customer with id : id
-
+        if (customerDAO.findById(id).isPresent()) {
+            customerDAO.deleteById(id);
+        }
         return false;
     }
 }
