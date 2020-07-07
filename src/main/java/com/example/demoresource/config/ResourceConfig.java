@@ -13,13 +13,14 @@ public class ResourceConfig extends ResourceServerConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/customer/**").authenticated();
+                .antMatchers("/customer/**").authenticated()
+                .antMatchers("/test").permitAll();
     }
 
     @Bean
     public RemoteTokenServices tokenServices(){
         RemoteTokenServices tokenServices = new RemoteTokenServices();
-        tokenServices.setCheckTokenEndpointUrl("http://localhost:8081/oauth/check_token");
+        tokenServices.setCheckTokenEndpointUrl("http://localhost:8081/check-token");
         tokenServices.setClientId("my-trusted-client");
         tokenServices.setClientSecret("secret");
         return tokenServices;

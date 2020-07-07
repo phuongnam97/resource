@@ -2,6 +2,8 @@ package com.example.demoresource.controller;
 
 import com.example.demoresource.model.Customer;
 import com.example.demoresource.service.CustomerService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +13,8 @@ import java.util.List;
 
 @RestController
 public class CustomerController {
+    private static final Logger LOGGER = LoggerFactory.getLogger(CustomerController.class);
+
     @Autowired
     private CustomerService customerService;
 
@@ -49,7 +53,7 @@ public class CustomerController {
     }
 
     @DeleteMapping("/customer/{id}")
-    public ResponseEntity<Customer> updateCustomer(@PathVariable("id") Long id){
+    public ResponseEntity<Customer> deleteCustomer(@PathVariable("id") Long id){
         Customer existing = customerService.getById(id);
         if (existing == null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
